@@ -1,4 +1,4 @@
-apiVersion: batch.tutorial.kubebuilder.io/v1
+apiVersion: batch.kubebuildertutorial.kubebuilder.io/v1
 kind: CronJob
 metadata:
   name: cronjob-sample

@@ -1,5 +1,5 @@
-domain: tutorial.kubebuilder.io
-repo: tutorial
+domain: kubebuildertutorial.kubebuilder.io
+repo: kubebuildertutorial
 resources:
 - group: batch
   kind: CronJob

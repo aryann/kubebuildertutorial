@@ -1,4 +1,4 @@
-module tutorial
+module kubebuildertutorial
 
 go 1.13
 

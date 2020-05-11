@@ -26,8 +26,8 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	batchv1 "tutorial/api/v1"
-	"tutorial/controllers"
+	batchv1 "kubebuildertutorial/api/v1"
+	"kubebuildertutorial/controllers"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -59,7 +59,7 @@ func main() {
 		MetricsBindAddress: metricsAddr,
 		Port:               9443,
 		LeaderElection:     enableLeaderElection,
-		LeaderElectionID:   "3661182f.tutorial.kubebuilder.io",
+		LeaderElectionID:   "3661182f.kubebuildertutorial.kubebuilder.io",
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
