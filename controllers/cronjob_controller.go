@@ -229,7 +229,7 @@ func (r *CronJobReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	}
 	log.V(1).Info("created Job for CronJob run", "job", job)
 
-	return ctrl.Result{}, nil
+	return scheduledResult, nil
 }
 
 func isJobFinished(job *kbatch.Job) (bool, kbatch.JobConditionType) {
@@ -316,9 +316,29 @@ func (r *CronJobReconciler) constructJobForCronJob(cronJob *batch.CronJob, sched
 
 var (
 	jobOwnerKey = ".metadata.controller"
+	apiGVStr    = batch.GroupVersion.String()
 )
 
 func (r *CronJobReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	if r.Clock == nil {
+		r.Clock = realClock{}
+	}
+
+	if err := mgr.GetFieldIndexer().IndexField(&kbatch.Job{}, jobOwnerKey, func(rawObj runtime.Object) []string {
+		job := rawObj.(*kbatch.Job)
+		owner := metav1.GetControllerOf(job)
+		if owner == nil {
+			return nil
+		}
+		if owner.APIVersion != apiGVStr || owner.Kind != "CronJob" {
+			return nil
+		}
+
+		return []string{owner.Name}
+	}); err != nil {
+		return err
+	}
+
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&batch.CronJob{}).
 		Complete(r)
